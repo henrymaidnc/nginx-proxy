@@ -46,3 +46,7 @@ docker compose exec nginx nginx -s reload
 
 Certs are managed by certbot on the host and mounted read-only at `/etc/letsencrypt`.  
 The `certbot_www` volume serves the ACME HTTP-01 challenge at `/.well-known/acme-challenge/`.
+
+git remote add origin git@github.com:henrymaidnc/nginx-proxy.git
+git push -u origin main
+
