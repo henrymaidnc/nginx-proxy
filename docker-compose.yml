@@ -13,6 +13,12 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - certbot_www:/var/www/certbot
+    networks:
+      - default
+      - apps
 
 volumes:
   certbot_www:
+networks:
+  apps:
+    external: true
