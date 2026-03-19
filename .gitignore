@@ -1,3 +1,4 @@
 # No secrets or local state should be committed
 .env
 *.log
+traefik/acme/

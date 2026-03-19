@@ -8,7 +8,9 @@ Owns ports **80** and **443**. Routes traffic by subdomain to each app's host po
 | Domain | Host port | Project |
 |---|---|---|
 | tsubame-arts.econictek.com | 8082 (frontend), 8002 (API) | tsubame-store |
-| henry-portfolio.econictek.com | 8083 | my-creative-showcase |
+| henry-portfolio.econictek.com | 8083 (frontend), 8003 (API) | my-creative-showcase |
+| retail.econictek.com | 8084 (frontend), 8004 (API) | retail-econitek |
+| cosedum.com | 8085 (frontend), 8005 (API) | cosedum-store |
 
 ## Start / reload
 

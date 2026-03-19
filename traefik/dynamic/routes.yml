@@ -1,0 +1,95 @@
+http:
+  middlewares:
+    security-headers:
+      headers:
+        stsSeconds: 31536000
+        customResponseHeaders:
+          Content-Security-Policy: "upgrade-insecure-requests"
+    redirect-to-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+    redirect-to-arts-host:
+      redirectRegex:
+        regex: "^https?://tsubame-art\\.econictek\\.com/(.*)"
+        replacement: "https://tsubame-arts.econictek.com/$${1}"
+        permanent: true
+  routers:
+    tsubame-arts-http:
+      rule: "Host(`tsubame-arts.econictek.com`)"
+      entryPoints:
+        - web
+      middlewares:
+        - redirect-to-https
+      service: noop@internal
+    henry-portfolio-http:
+      rule: "Host(`henry-portfolio.econictek.com`)"
+      entryPoints:
+        - web
+      middlewares:
+        - redirect-to-https
+      service: noop@internal
+    tsubame-art-http:
+      rule: "Host(`tsubame-art.econictek.com`)"
+      entryPoints:
+        - web
+      middlewares:
+        - redirect-to-arts-host
+      service: noop@internal
+    tsubame-arts-api:
+      rule: "Host(`tsubame-arts.econictek.com`) && PathPrefix(`/api/`)"
+      entryPoints:
+        - websecure
+      service: tsubame-arts-api
+      tls:
+        certResolver: le
+      middlewares:
+        - security-headers
+      priority: 10
+    tsubame-arts-frontend:
+      rule: "Host(`tsubame-arts.econictek.com`)"
+      entryPoints:
+        - websecure
+      service: tsubame-arts-frontend
+      tls:
+        certResolver: le
+      middlewares:
+        - security-headers
+      priority: 1
+    henry-portfolio-api:
+      rule: "Host(`henry-portfolio.econictek.com`) && PathPrefix(`/api/`)"
+      entryPoints:
+        - websecure
+      service: henry-portfolio-api
+      tls:
+        certResolver: le
+      middlewares:
+        - security-headers
+      priority: 10
+    henry-portfolio-frontend:
+      rule: "Host(`henry-portfolio.econictek.com`)"
+      entryPoints:
+        - websecure
+      service: henry-portfolio-frontend
+      tls:
+        certResolver: le
+      middlewares:
+        - security-headers
+      priority: 1
+  services:
+    tsubame-arts-api:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8002"
+    tsubame-arts-frontend:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8082"
+    henry-portfolio-api:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8003"
+    henry-portfolio-frontend:
+      loadBalancer:
+        servers:
+          - url: "http://host.docker.internal:8083"
